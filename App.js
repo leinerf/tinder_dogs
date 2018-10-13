@@ -8,20 +8,38 @@ import SwipeCards from 'react-native-swipeable-cards';
 class Card extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      image: "https://previews.123rf.com/images/damedeeso/damedeeso1210/damedeeso121000012/15570241-placeholder-banner-dog.jpg",
+      name: "faker"
+    }
   }
- 
+  
+  async componentWillMount(){
+    try {
+      const myJson = await fetch('https://dog.ceo/api/breeds/image/random').then(function(response) {
+        return response.json();
+      })
+      this.setState({image: myJson.message})
+    } catch(err){
+      console.log(err)
+    }
+    
+  }
+
   render() {
+    
     return (
+        
       <View style={{marginTop: 100}}>
           <View style={styles.card}>
-            <Image style={styles.thumbnail} source={{uri: this.props.image}} />
-            <Text style={styles.text}>This is card {this.props.name}</Text>
-            <Button type='outline' title='Nah' 
+            <Image style={styles.thumbnail} source={{uri: this.state.image}} alt="waiting" />
+            <Text style={styles.text}> {this.state.faker} </Text>
+            {/* <Button type='outline' title='Nah' 
             
             onPress={() => {
                 this.props.swiper._forceNextCard()
             }}
-          />
+          /> */}
           </View>
       </View>
       
@@ -133,6 +151,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 1,
     elevation: 1,
+    padding:100,
   },
   thumbnail: {
     width: 300,
